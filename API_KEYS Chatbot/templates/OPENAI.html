@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPENAI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .chatbox {
+            width: 500px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            background-color: #fff;
+            overflow: hidden;
+        }
+        .header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            text-align: center;
+            font-size: 18px;
+        }
+        .messages {
+            padding: 20px;
+            height: 350px;
+            overflow-y: auto;
+            border-bottom: 1px solid #ccc;
+        }
+        .message {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            max-width: 70%;
+            word-wrap: break-word;
+            position: relative;
+        }
+        .message.user {
+            background-color: #007bff;
+            color: #fff;
+            margin-left: auto;
+            text-align: right;
+        }
+        .message.assistant {
+            background-color: #f1f1f1;
+            color: #333;
+            margin-right: auto;
+            text-align: left;
+        }
+        .message.code {
+            background-color: #282c34;
+            color: #61dafb;
+            font-family: monospace;
+            white-space: pre;
+            overflow-x: auto;
+            padding-right: 50px;
+        }
+        .message .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #61dafb;
+            border: none;
+            color: #282c34;
+            padding: 5px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        .message .copy-button:hover {
+            background: #4fb5da;
+        }
+        .message .language {
+            font-size: 0.85em;
+            color: #ccc;
+            margin-bottom: 5px;
+        }
+        .input-box {
+            display: flex;
+            padding: 10px;
+            background-color: #fff;
+        }
+        .input-box input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        .input-box button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .input-box button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="chatbox">
+        <div class="header">Chat with AI</div>
+        <div class="messages" id="messages"></div>
+        <div class="input-box">
+            <input type="text" id="messageInput" placeholder="Type your message here..." />
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        let chatHistory = [];
+
+        function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value;
+
+            if (message.trim() === '') return;
+
+            appendMessage('user', message);
+
+            fetch('/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    message: message,
+                    chat_history: chatHistory
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.response) {
+                    appendMessage('assistant', data.response, data.response_type);
+                    chatHistory = data.chat_history;
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            });
+
+            messageInput.value = '';
+        }
+
+        function appendMessage(role, message, type = 'text') {
+            const messagesDiv = document.getElementById('messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${role} ${type === 'code' ? 'code' : ''}`;
+
+            if (type === 'code') {
+                const languageHeading = document.createElement('div');
+                languageHeading.className = 'language';
+                languageHeading.textContent = 'Code Snippet:';
+
+                const copyButton = document.createElement('button');
+                copyButton.className = 'copy-button';
+                copyButton.textContent = 'Copy';
+                copyButton.onclick = () => copyToClipboard(message);
+
+                messageDiv.appendChild(languageHeading);
+                messageDiv.textContent = message;
+                messageDiv.appendChild(copyButton);
+            } else {
+                messageDiv.textContent = message;
+            }
+
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function copyToClipboard(text) {
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = text;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+            alert('Code copied to clipboard!');
+        }
+    </script>
+</body>
+</html>
