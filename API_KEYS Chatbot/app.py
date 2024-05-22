@@ -3,7 +3,7 @@ from flask import Flask, request, render_template, jsonify
 
 app = Flask(__name__)
 
-API_KEY = "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"
+API_KEY = "Your API_KEY here"
 
 def call_groq_api(api_key, chat_history):
     client = groq.Groq(api_key=api_key)
