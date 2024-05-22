@@ -6,10 +6,11 @@ This project implements a face recognition system using Python, OpenCV, and Dlib
 ## Installation
 To run the face recognition system, follow these installation steps:
 
-1. Clone the Repository:
-2. 'git clone https://github.com/SyedAejazAhmed/Python_Mini_Project/tree/main/Face_Recognition'
-
-
+Clone the Repository:
+'''bash
+  git clone https://github.com/SyedAejazAhmed/Python_Mini_Project/tree/main/Face_Recognition
+  '''
+  
 ## Install Dependencies:
 Navigate to the project directory and install the required Python dependencies using pip:
 'cd face-recognition-project'
