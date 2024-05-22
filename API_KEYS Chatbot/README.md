@@ -26,18 +26,6 @@ This is a simple web application that allows users to chat with an AI model powe
 
 5. Open your web browser and go to `http://127.0.0.1:5000`.
 
-## Project Structure
-API_KEYS Chatbot/
-│
-├── app.py # Main Flask application
-├── templates/
-│ └── OPENAI.html # HTML template for the chat interface
-├── static/
-│ └── style.css # CSS styles for the chat interface
-├── README.md # Project documentation
-└── requirements.txt # Python dependencies
-
-
 ## Usage
 
 1. Type your message in the input box at the bottom of the chat interface.
