@@ -8,7 +8,8 @@ To run the face recognition system, follow these installation steps:
 
 Clone the Repository:
 ```bash
-  git clone https://github.com/SyedAejazAhmed/Python_Mini_Project/tree/main/Face_Recognition
+  git clone https://github.com/SyedAejazAhmed/Python_Mini_Project.git
+  cd Face_Recognition 
   ```
   
 ## Install Dependencies:
