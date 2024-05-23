@@ -11,9 +11,6 @@ This repository contains a project for detecting deepfakes using machine learnin
 - [Introduction](#introduction)
 - [Setup](#setup)
 - [Usage](#usage)
-  - [Frame Extraction](#frame-extraction)
-  - [Model Training](#model-training)
-  - [Deepfake Detection](#deepfake-detection)
 - [Dependencies](#dependencies)
 - [Contributing](#contributing)
 - [License](#license)
@@ -45,12 +42,6 @@ To set up the project on your local machine, follow these steps:
     pip install streamlit opencv-python-headless tensorflow
     ```
 
-## Dependencies
-1. Python 3.6+
-2. TensorFlow
-3. OpenCV
-4. Streamlit
-
 ## Usage
 ## Running the Streamlit App
 
@@ -68,6 +59,12 @@ streamlit run train_model_streamlit.py
 ```bash
 streamlit run detect_deepfake_streamlit.py
 ```
+
+## Dependencies
+1. Python 3.6+
+2. TensorFlow
+3. OpenCV
+4. Streamlit
 
 ## Contributing
 Contributions are welcome! Please open an issue or submit a pull request if you have any improvements or bug fixes.
