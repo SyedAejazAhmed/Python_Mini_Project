@@ -43,8 +43,8 @@ To set up the project on your local machine, follow these steps:
     ```
 
 ## Usage
-## Running the Streamlit App
 
+### Running the Streamlit App
 ### You need to run each script separately using Streamlit. Open a terminal in your project directory and run:
 ```bash
 streamlit run extract_frames_streamlit.py
