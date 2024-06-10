@@ -15,7 +15,7 @@ Clone the Repository:
 ## Install Dependencies:
 Navigate to the project directory and install the required Python dependencies using pip:
 ```bash
-cd face-recognition-project
+cd Face_Recognition
 pip install -r requirements.txt
 ```
 
