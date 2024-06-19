@@ -15,11 +15,11 @@ This is a simple password generator application built using Kivy framework in Py
 ## Usage
 1. Clone the repository:
 ```bash
-git clone https://github.com/your-username/password-generator.git
+git clone https://github.com/SyedAejazAhmed/Python_Mini_Project.git
 ```
 2. Navigate into the project directory:
 ```bash
-cd password-generator
+cd Password_Generator
 ```
 
 3. Install the dependencies (if not already installed):
