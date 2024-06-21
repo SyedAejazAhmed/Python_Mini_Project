@@ -1,11 +1,98 @@
 import sqlite3
-from kivy.app import App
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.label import Label
-from kivy.uix.textinput import TextInput
-from kivy.uix.button import Button
-from kivy.uix.popup import Popup
-from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.lang import Builder
+from kivy.uix.screenmanager import Screen, ScreenManager
+from kivymd.app import MDApp
+from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.button import MDRaisedButton
+from kivymd.uix.label import MDLabel
+from kivymd.uix.textfield import MDTextField
+from kivymd.uix.dialog import MDDialog
+
+KV = '''
+ScreenManager:
+    LoginScreen:
+    ChatScreen:
+
+<LoginScreen>:
+    name: 'login'
+
+    MDBoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        spacing: dp(20)
+
+        MDLabel:
+            text: "Welcome to ChatBot"
+            halign: 'center'
+            theme_text_color: 'Primary'
+            font_style: 'H4'
+            size_hint_y: None
+            height: self.texture_size[1]
+
+        MDBoxLayout:
+            orientation: 'vertical'
+            spacing: dp(20)
+
+            MDTextField:
+                id: username
+                hint_text: "Username"
+                mode: "rectangle"
+                on_text_validate: app.login(username.text, password.text)
+
+            MDTextField:
+                id: password
+                hint_text: "Password"
+                password: True
+                mode: "rectangle"
+                on_text_validate: app.login(username.text, password.text)
+
+            MDRaisedButton:
+                text: "Login"
+                pos_hint: {'center_x': 0.5}
+                size_hint: (None, None)
+                size: dp(100), dp(50)
+                on_press: app.login(username.text, password.text)
+
+            MDRaisedButton:
+                text: "Register"
+                pos_hint: {'center_x': 0.5}
+                size_hint: (None, None)
+                size: dp(100), dp(50)
+                on_press: app.register(username.text, password.text)
+
+<ChatScreen>:
+    name: 'chat'
+
+    MDBoxLayout:
+        orientation: 'vertical'
+        padding: dp(10)
+        spacing: dp(10)
+
+        MDLabel:
+            id: chat_history
+            text: "Chatbot: Hello! I am a simple chatbot. Type 'bye' to exit.\\n"
+            size_hint_y: None
+            height: dp(400)
+            theme_text_color: 'Primary'
+
+        MDBoxLayout:
+            size_hint_y: None
+            height: dp(50)
+            spacing: dp(10)
+
+            MDTextField:
+                id: user_input
+                hint_text: "Type your message here"
+                mode: "rectangle"
+                on_text_validate: app.on_button_press(user_input.text)
+
+            MDRaisedButton:
+                id: send_button
+                text: "Send"
+                size_hint: (None, None)
+                size: dp(80), dp(50)
+                on_press: app.on_button_press(user_input.text)
+'''
 
 def create_user_table():
     conn = sqlite3.connect('users.db')
@@ -40,8 +127,6 @@ def authenticate_user(username, password):
     conn.close()
     return user is not None
 
-create_user_table()
-
 def chatbot_response(user_input):
     user_input = user_input.lower()
 
@@ -60,95 +145,53 @@ def chatbot_response(user_input):
     else:
         return "I'm sorry, I don't understand that. Can you please rephrase?"
 
-class LoginRegisterScreen(BoxLayout):
-    def __init__(self, **kwargs):
-        super(LoginRegisterScreen, self).__init__(**kwargs)
-        self.orientation = 'vertical'
-        self.spacing = 10
-        self.padding = [50, 50, 50, 50]
+class LoginScreen(Screen):
+    pass
 
-        self.add_widget(Label(text="Welcome to ChatBot", font_size=24, size_hint=(1, 0.2), halign='center'))
+class ChatScreen(Screen):
+    pass
 
-        self.username_input = TextInput(hint_text="Username", multiline=False, size_hint=(1, 0.2))
-        self.add_widget(self.username_input)
-
-        self.password_input = TextInput(hint_text="Password", multiline=False, password=True, size_hint=(1, 0.2))
-        self.add_widget(self.password_input)
-
-        self.login_button = Button(text="Login", background_color=(0.1, 0.5, 0.7, 1), size_hint=(1, 0.2))
-        self.login_button.bind(on_press=self.login)
-        self.add_widget(self.login_button)
-
-        self.register_button = Button(text="Register", background_color=(0.1, 0.7, 0.3, 1), size_hint=(1, 0.2))
-        self.register_button.bind(on_press=self.register)
-        self.add_widget(self.register_button)
-
-    def login(self, instance):
-        username = self.username_input.text
-        password = self.password_input.text
-        if authenticate_user(username, password):
-            App.get_running_app().show_chat_screen()
-        else:
-            self.show_popup("Login failed", "Invalid username or password")
-
-    def register(self, instance):
-        username = self.username_input.text
-        password = self.password_input.text
-        if add_user(username, password):
-            self.show_popup("Registration successful", "You can now login with your credentials")
-        else:
-            self.show_popup("Registration failed", "Username already exists")
-
-    def show_popup(self, title, message):
-        popup = Popup(title=title, content=Label(text=message), size_hint=(None, None), size=(400, 200))
-        popup.open()
-
-class ChatBotApp(App):
+class ChatBotApp(MDApp):
     def build(self):
-        self.screen_manager = ScreenManager()
-        self.login_screen = Screen(name='login')
-        self.login_screen.add_widget(LoginRegisterScreen())
-        self.chat_screen = Screen(name='chat')
-        self.chat_screen.add_widget(self.create_chat_screen())
-
-        self.screen_manager.add_widget(self.login_screen)
-        self.screen_manager.add_widget(self.chat_screen)
-
+        self.theme_cls.primary_palette = "Blue"
+        self.screen_manager = Builder.load_string(KV)
         return self.screen_manager
 
-    def create_chat_screen(self):
-        chat_layout = BoxLayout(orientation='vertical', padding=[10, 10, 10, 10], spacing=10)
+    def login(self, username, password):
+        if authenticate_user(username, password):
+            self.show_chat_screen()
+        else:
+            self.show_dialog("Login failed", "Invalid username or password")
 
-        self.chat_history = Label(size_hint_y=None, height=400, text="Chatbot: Hello! I am a simple chatbot. Type 'bye' to exit.\n", valign='top')
-        chat_layout.add_widget(self.chat_history)
+    def register(self, username, password):
+        if add_user(username, password):
+            self.show_dialog("Registration successful", "You can now login with your credentials")
+        else:
+            self.show_dialog("Registration failed", "Username already exists")
 
-        self.user_input = TextInput(multiline=False, size_hint_y=None, height=30)
-        chat_layout.add_widget(self.user_input)
-
-        self.submit_button = Button(text="Send", size_hint_y=None, height=50, background_color=(0.1, 0.5, 0.7, 1))
-        self.submit_button.bind(on_press=self.on_button_press)
-        chat_layout.add_widget(self.submit_button)
-
-        return chat_layout
+    def show_dialog(self, title, message):
+        dialog = MDDialog(title=title, text=message, size_hint=(0.8, 1))
+        dialog.open()
 
     def show_chat_screen(self):
         self.screen_manager.current = 'chat'
 
-    def on_button_press(self, instance):
-        user_message = self.user_input.text
+    def on_button_press(self, user_message):
         if user_message.lower() == 'bye':
             self.update_chat_history("Goodbye! Have a great day!")
-            self.user_input.disabled = True
-            self.submit_button.disabled = True
+            self.screen_manager.get_screen('chat').ids.user_input.disabled = True
+            self.screen_manager.get_screen('chat').ids.send_button.disabled = True
         else:
             response = chatbot_response(user_message)
             self.update_chat_history(f"You: {user_message}")
             self.update_chat_history(f"Chatbot: {response}")
-            self.user_input.text = ""
+            self.screen_manager.get_screen('chat').ids.user_input.text = ""
 
     def update_chat_history(self, message):
-        self.chat_history.text += message + "\n"
-        self.chat_history.height += 20
+        chat_history = self.screen_manager.get_screen('chat').ids.chat_history
+        chat_history.text += message + "\n"
+        chat_history.height += 20
 
 if __name__ == "__main__":
+    create_user_table()
     ChatBotApp().run()
