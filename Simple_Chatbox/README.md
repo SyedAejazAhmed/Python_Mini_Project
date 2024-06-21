@@ -1,42 +1,54 @@
-# ChatBot App with User Authentication
-This repository contains a Kivy-based application that implements a simple chatbot with user authentication using SQLite. The chatbot responds to basic text inputs, and users can register and log in to use the chatbot.
+# ChatBot Application
+
+This is a simple ChatBot application built using Python and KivyMD. The application allows users to register, login, and chat with a basic chatbot.
 
 ## Features
-1. User registration and login system using SQLite.
-2. Simple chatbot that responds to specific keywords and phrases.
-3. Kivy-based graphical user interface.
 
-## Getting Started
-### Prerequisites
-1. Python 3.x
-2. Kivy
-3. SQLite
-4. kivymd
+- User Registration
+- User Login
+- Basic Chatbot Interaction
 
-Clone the repository: 
+## Technologies Used
+
+- Python
+- Kivy
+- KivyMD
+- SQLite
+
+## Installation
+
+1. Clone the repository:
 ```bash
 git clone https://github.com/SyedAejazAhmed/Python_Mini_Project.git
-cd Simple_Chatbox
+cd Simple_chatbot
 ```
 
-## Code Explanation
-### SQLite Database Functions
-1. create_user_table(): Creates the users table if it does not exist.
-2. add_user(username, password): Adds a new user to the database.
-3. authenticate_user(username, password): Authenticates a user based on provided credentials.
+2. Install the dependencies:
+```bash
+pip install -r requirements.txt
+```
 
-## Chatbot Response Function
-chatbot_response(user_input): Generates a response to user input based on predefined keywords and phrases.
+3. Run the application:
+```bash
+python chatbot.py
+```
 
-## Kivy App
-1. LoginRegisterScreen: A Kivy layout for user login and registration.
-2. ChatBotApp: The main Kivy application class that manages screens and handles user interactions.
+## File Structure
+- app.py: Main application file containing the logic for the ChatBot app.
+- requirements.txt: List of dependencies required for the project.
+- users.db: SQLite database file for storing user information.
 
-## Contributing
-Contributions are welcome! Please submit a pull request or open an issue to discuss any changes or improvements.
+## Usage
+- Launch the application.
+- Register a new user by entering a username and password, then click "Register".
+- Login with the registered username and password.
+- Chat with the bot by typing your messages and pressing Enter or clicking "Send".
 
 ## License
 This project is licensed under the MIT License. See the LICENSE file for details.
 
-## Acknowledgments
-This project is inspired by the need for simple user authentication and chatbot interaction, serving as an educational example for learning Python, Kivy, and SQLite integration.
+## Contributing
+Contributions are welcome! Please open an issue or submit a pull request for any changes.
+
+## Contact
+For any questions or feedback, please contact syed.aejaz.ahmed2006@gmail.com
