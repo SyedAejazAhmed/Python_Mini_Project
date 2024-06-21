@@ -11,6 +11,7 @@ This repository contains a Kivy-based application that implements a simple chatb
 1. Python 3.x
 2. Kivy
 3. SQLite
+4. kivymd
 
 Clone the repository: 
 ```bash
