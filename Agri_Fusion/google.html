@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign in - Google Account</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f8f9fa;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+    .container {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        width: 300px;
+    }
+    h1 { font-size: 24px; color: #202124; margin-bottom: 16px; text-align: center; }
+    .account { display: flex; align-items: center; margin-bottom: 10px; cursor: pointer; }
+    .icon {
+        height: 40px; width: 40px; border-radius: 50%;
+        background: url('google.jpg') no-repeat center center; background-size: cover;
+        margin-right: 10px;
+    }
+    .footer {
+        text-align: center; font-size: 12px; color: #5f6368; margin-top: 16px;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Choose an account</h1>
+    <div class="account" onclick="redirectToRoleSelection()">
+        <div class="icon"></div>
+        <div class="text">abc123@gmail.com</div>
+    </div>
+    <div class="account" onclick="redirectToRoleSelection()">
+        <div class="icon"></div>
+        <div class="text">zyx098@gmail.com</div>
+    </div>
+    <div class="footer">
+        Before using this app, you can review AgriFusion's privacy policy and Terms of Service.
+    </div>
+</div>
+
+<script>
+    function redirectToRoleSelection() {
+        window.location.href = 'roleSelection.html'; // Redirect to the role selection page
+    }
+</script>
+
+</body>
+</html>

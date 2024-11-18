@@ -1,0 +1,316 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Truck Driver Orders</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f3f4f6 25%, #e2e8f0 75%);
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    header {
+      background-color: #1E293B;
+      padding: 40px;
+      text-align: center;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 150%;
+      height: 150%;
+      background-color: rgba(255, 255, 255, 0.1);
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      z-index: 1;
+      position: relative;
+    }
+
+    header p {
+      font-size: 1.2rem;
+      margin-top: 10px;
+      z-index: 1;
+      position: relative;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      margin-bottom: 20px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .card h2 {
+      color: #1E293B;
+      font-size: 1.75rem;
+    }
+
+    .card p {
+      font-size: 1rem;
+      margin: 12px 0;
+      color: #64748B;
+    }
+
+    .button {
+      display: inline-block;
+      background-color: #10B981;
+      color: white;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .button:hover {
+      background-color: #059669;
+      transform: scale(1.05);
+    }
+
+    .transport-link {
+      display: inline-block;
+      background-color: #1E293B;
+      color: white;
+      text-align: center;
+      padding: 15px 30px;
+      margin-top: 30px;
+      border-radius: 8px;
+      font-size: 1.2rem;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .transport-link:hover {
+      background-color: #374151;
+      transform: translateY(-5px);
+    }
+
+    .graph-container, .map-container {
+      margin-top: 40px;
+    }
+
+    .graph-container h2, .map-container h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: #1E293B;
+      text-align: center;
+    }
+
+    #map {
+      height: 400px;
+      width: 100%;
+      border-radius: 8px;
+    }
+
+    /* Animations */
+    .fade-in {
+      animation: fadeIn 1s ease-in-out forwards;
+    }
+
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .order-details {
+      display: none;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 15px;
+      position: absolute;
+      top: 50px;
+      right: 0;
+      width: 300px;
+      z-index: 10;
+    }
+
+    .order-details.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+<header class="fade-in">
+  <h1>Welcome Truck Driver!</h1>
+  <p>Manage your deliveries with ease and precision.</p>
+</header>
+
+<div class="container">
+
+  <!-- Orders Section -->
+  <div class="card fade-in">
+    <h2>Order #001</h2>
+    <p><strong>Pickup Location:</strong> Haryana</p>
+    <p><strong>Destination:</strong> Kerala</p>
+    <p><strong>Goods:</strong> 200 tons of Wheat</p>
+    <p><strong>Delivery Time:</strong> 2 days</p>
+    <p><strong>Approx. Distance:</strong> 2,500 km</p>
+    <a href="#" class="button" onclick="showOrderDetails('order1')"><i class="fas fa-truck"></i> Accept Order</a>
+    <div id="order1" class="order-details">
+      <h3>Additional Orders on the Way</h3>
+      <p>500 kg of Coconut to be loaded on the way to Kerala.</p>
+      <p>300 kg of Tomato to be loaded on the way to Haryana.</p>
+      <h4>Available Loads for Return Journey</h4>
+      <p>200 kg of Pineapple available on the return journey to Haryana.</p>
+      <p>400 kg of Banana available on the return journey to Kerala.</p>
+    </div>
+  </div>
+
+  <div class="card fade-in">
+    <h2>Order #002</h2>
+    <p><strong>Pickup Location:</strong> Punjab</p>
+    <p><strong>Destination:</strong> Tamil Nadu</p>
+    <p><strong>Goods:</strong> 100 tons of Rice</p>
+    <p><strong>Delivery Time:</strong> 3 days</p>
+    <p><strong>Approx. Distance:</strong> 2,700 km</p>
+    <a href="#" class="button" onclick="showOrderDetails('order2')"><i class="fas fa-truck"></i> Accept Order</a>
+    <div id="order2" class="order-details">
+      <h3>Additional Orders on the Way</h3>
+      <p>300 kg of Potato to be loaded on the way to Tamil Nadu.</p>
+      <p>200 kg of Onion to be loaded on the way to Punjab.</p>
+      <h4>Available Loads for Return Journey</h4>
+      <p>150 kg of Grapes available on the return journey to Punjab.</p>
+      <p>250 kg of Orange available on the return journey to Tamil Nadu.</p>
+    </div>
+  </div>
+
+  <div class="card fade-in">
+    <h2>Order #003</h2>
+    <p><strong>Pickup Location:</strong> Uttar Pradesh</p>
+    <p><strong>Destination:</strong> Maharashtra</p>
+    <p><strong>Goods:</strong> 150 tons of Sugarcane</p>
+    <p><strong>Delivery Time:</strong> 4 days</p>
+    <p><strong>Approx. Distance:</strong> 1,500 km</p>
+    <a href="#" class="button" onclick="showOrderDetails('order3')"><i class="fas fa-truck"></i> Accept Order</a>
+    <div id="order3" class="order-details">
+      <h3>Additional Orders on the Way</h3>
+      <p>200 kg of Peanuts to be loaded on the way to Maharashtra.</p>
+      <p>150 kg of Cashews to be loaded on the way to Uttar Pradesh.</p>
+      <h4>Available Loads for Return Journey</h4>
+      <p
+      <p>200 kg of Dates available on the return journey to Uttar Pradesh.</p>
+      <p>300 kg of Raisins available on the return journey to Maharashtra.</p>
+    </div>
+  </div>
+
+  <!-- Map Section -->
+  <div class="map-container fade-in">
+    <h2>Businessman Locations</h2>
+    <div id="map"></div>
+  </div>
+
+  <!-- Graph Section -->
+  <div class="graph-container fade-in">
+    <h2>Monthly Fuel Usage</h2>
+    <canvas id="fuelChart"></canvas>
+  </div>
+
+</div>
+
+<script>
+  function showOrderDetails(orderId) {
+    const orders = document.querySelectorAll('.order-details');
+    orders.forEach(order => {
+      if (order.id === orderId) {
+        order.classList.toggle('active');
+      } else {
+        order.classList.remove('active');
+      }
+    });
+  }
+
+  // Initialize Map
+  const map = L.map('map').setView([13.0083, 80.2428], 13); // Centered on Jeppiaar Engineering College
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 18,
+    attribution: '© OpenStreetMap contributors'
+  }).addTo(map);
+
+  const businessmanLocations = [
+    { name: 'Businessman 1', lat: 13.0075, lng: 80.2357, phone: '123-456-7890' },
+    { name: 'Businessman 2', lat: 13.0125, lng: 80.2407, phone: '123-456-7891' },
+    { name: 'Businessman 3', lat: 13.0150, lng: 80.2450, phone: '123-456-7892' },
+    { name: 'Businessman 4', lat: 13.0100, lng: 80.2500, phone: '123-456-7893' },
+    { name: 'Businessman 5', lat: 13.0050, lng: 80.2550, phone: '123-456-7894' },
+
+  ];
+
+  businessmanLocations.forEach(businessman => {
+    L.marker([businessman.lat, businessman.lng]).addTo(map)
+      .bindPopup(`<b>${businessman.name}</b><br>Phone: ${businessman.phone}`);
+  });
+
+  // Initialize Fuel Chart
+  const ctx = document.getElementById('fuelChart').getContext('2d');
+  const fuelChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+      datasets: [{
+        label: 'Fuel Usage (liters)',
+        data: [120, 150, 170, 130],
+        backgroundColor: 'rgba(16, 185, 129, 0.5)',
+        borderColor: '#10B981',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+</script>
+
+</body>
+</html>
+
